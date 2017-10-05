@@ -3,7 +3,11 @@ let app = express();
 
 //app.use(bodyParser.json());
 app.use(express.static(__dirname + "/public"));
-var server = app.listen(4005);
+//var server = app.listen(4005);
 
-console.log('got request');
+//console.log('got request');
+
+app.listen(app.get('port'), function() {
+  console.log('Node app is running on port', app.get('port'));
+});
 
