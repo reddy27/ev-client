@@ -1,0 +1,9 @@
+let express = require('express');
+let app = express();
+
+//app.use(bodyParser.json());
+app.use(express.static(__dirname + "/public"));
+var server = app.listen(4005);
+
+console.log('got request');
+
