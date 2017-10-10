@@ -102,6 +102,7 @@ let Landingpage = class Landingpage {
         var map = new google.maps.Map(document.getElementById('map'), {
             mapTypeControl: false,
             draggable: true,
+            disableDefaultUI: true,
             center: {
                 lat: 37.370196,
                 lng: -122.003932 //-121.86402454850463 -121.90990105149535
@@ -130,26 +131,6 @@ let Landingpage = class Landingpage {
         //     document.getElementById('current').innerHTML = '<p>Marker dropped: Current Lat: ' + evt.latLng.lat().toFixed(3) + ' Current Lng: ' + evt.latLng.lng().toFixed(3) + '</p>';
         // });
         //console.log(this.map.getPosition());
-    }
-    getLocationSpecifc(userlocation) {
-        this.tempToken = this.loginObj;
-        var CORSHeaders = new __WEBPACK_IMPORTED_MODULE_5__angular_http__["a" /* Headers */]();
-        let accessToken = this.tempToken._body;
-        let parseToken = JSON.parse(accessToken);
-        CORSHeaders.append('x-access-token', parseToken.token);
-        CORSHeaders.append('x-key', 'pramod');
-        this.http.get('https://evoint.herokuapp.com/api/v1/getChargingPointBy?longitude=' + userlocation.longitude + '&latitude=' + userlocation.latitude, { headers: CORSHeaders }).map((res) => res.json())
-            .subscribe(data => {
-            console.log('data', data);
-            let tempData = [];
-            for (let latLng of data) {
-                let AddressInfo = {};
-                AddressInfo['Latitude'] = latLng.latitude;
-                AddressInfo['Longitude'] = latLng.longitude;
-                tempData.push(AddressInfo);
-            }
-            this.addMarkersToMap(tempData);
-        });
     }
     //pop up window  & post API call.
     addInfoWindow(marker, content) {
@@ -218,12 +199,295 @@ let Landingpage = class Landingpage {
                 position: position,
                 title: marker.title,
                 icon: 'https://s3.amazonaws.com/plugshare.production.assets/icons/G@2x.png',
-                map: this.map, draggable: true
+                map: this.map,
+                draggable: false
             });
-            let content = `<input type="text" id="feildInput">
+            var tempInfoObj = {
+                "_id": "59acf588a48dace266ebcceb",
+                "access_days_time": "24 hours daily; pay lot",
+                "cards_accepted": null,
+                "date_last_confirmed": "2017-05-04",
+                "expected_date": null,
+                "fuel_type_code": "ELEC",
+                "id": 1495,
+                "groups_with_access_code": "Public",
+                "open_date": "1995-08-30",
+                "owner_type_code": "P",
+                "status_code": "E",
+                "station_name": "Sacramento County Public Garage",
+                "station_phone": "916-874-6227",
+                "updated_at": "2017-05-04T13:14:52Z",
+                "geocode_status": "GPS",
+                "city": "Sacramento",
+                "intersection_directions": "7th St & G St",
+                "plus4": null,
+                "state": "CA",
+                "street_address": "725 7th St",
+                "zip": "95814",
+                "bd_blends": null,
+                "e85_blender_pump": null,
+                "ev_connector_types": null,
+                "ev_dc_fast_num": null,
+                "ev_level1_evse_num": null,
+                "ev_level2_evse_num": null,
+                "ev_network": null,
+                "ev_network_web": null,
+                "ev_other_evse": "1 SP Inductive",
+                "hy_status_link": null,
+                "lpg_primary": null,
+                "ng_fill_type_code": null,
+                "ng_psi": null,
+                "ng_vehicle_class": null,
+                "location": [
+                    -121.4956055,
+                    38.58431244
+                ],
+                "rating": 2,
+                "isCheckedIn": false,
+                "timeCheckedIn": "11:30",
+                "intendedDurationOfUse": "120",
+                "comments": [
+                    [
+                        "10/3/2017, 1:21:04 AM",
+                        "I disagree"
+                    ],
+                    [
+                        "10/3/2017, 1:23:14 AM",
+                        "I disagree"
+                    ],
+                    [
+                        "10/3/2017, 1:23:32 AM",
+                        "I disagree"
+                    ],
+                    [
+                        "10/3/2017, 1:23:45 AM",
+                        "I disagree"
+                    ],
+                    [
+                        "10/3/2017, 1:23:54 AM",
+                        "I disagree"
+                    ]
+                ],
+                "images": [
+                    [
+                        "https://www.ibm.com/support/knowledgecenter/en/SSRTLW_7.5.5/com.ibm.sca.tools.examples.doc/topics/jms_setup.html"
+                    ],
+                    [
+                        "https://www.ibm.com/support/knowledgecenter/en/SSRTLW_7.5.5/com.ibm.sca.tools.examples.doc/topics/jms_setup.html"
+                    ]
+                ]
+            };
+            let content = `<div id="charger_info">
+    <div id="charger_info_header">
+        <div id="charger_info_header_title" class=""> Kohls </div>
+    </div>
+		<div id="charger_info_header">
+				<div id="charger_info_header_title" class="">
+				 <span>Rating</span>
+				</div>
+		</div>
+    <div id="charger_info_break"></div>
+    <div id="charger_info_content">
+        <div id="charger_info_half_section">
+            <div id="charger_info_subheader">Ports</div>
+            <div class="charger_info_ports"> 4 EV Plug (J1772)s </div>
+            <div id="charger_info_spacer"></div>
+        </div>
+        <div id="charger_info_subheader">Stations</div>
+        <div class="charger_info_station_row">
+            <div class="charger_info_station">
+                <div class="charger_info_network_info">
+                    <div class="charger_info_network_name">ChargePoint</div>
+                    <div class="charger_info_network_outlets">EV Plug (J1772)</div>
+                </div>
+            </div>
+            <div class="charger_info_station">
+                <div class="charger_info_network_info">
+                    <div class="charger_info_network_name">ChargePoint</div>
+                    <div class="charger_info_network_outlets">EV Plug (J1772)</div>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+        <div id="charger_info_subheader">Address</div>
+        <div class="charger_info_address"> 4525 Rosewood Dr., Pleasanton, CA 94588 </div>
+        <div id="charger_info_spacer"></div>
+        <div id="charger_info_half_section" style="margin-right:0px">
+            <div id="charger_info_subheader">Hours</div>
+            <div id="charger_info_phone"> Available during business hours. </div>
+            <div id="charger_info_spacer"></div>
+        </div>
+        <div id="charger_info_subheader">Description</div>
+        <div class="charger_info_description"> I-580 exit 46. Four ChargePoint chargers. 6.6kWh each. Unrestricted and free. ONLY powered during open business hours. </div>
+        <div id="charger_info_spacer"></div>
+        <div id="charger_info_subheader">Photos</div>
+        <div id="charger_info_photos">
+            <div id="charger_info_photos_inner" style="width:304px">
+                <a class="charger_info_photo" rel="player=img" href="https://s3.amazonaws.com/plugshare.production.photos/photos/139879.jpg" id="139879"><img src="https://s3.amazonaws.com/plugshare.production.photos/thumb/139879.png" width="72px" height="72px"></a>
+                <a class="charger_info_photo" rel="player=img" href="https://s3.amazonaws.com/plugshare.production.photos/photos/139878.jpg" id="139878"><img src="https://s3.amazonaws.com/plugshare.production.photos/thumb/139878.png" width="72px" height="72px"></a>
+                <a class="charger_info_photo" rel="player=img" href="https://s3.amazonaws.com/plugshare.production.photos/photos/137659_1466187596.png" id="137659"><img src="https://s3.amazonaws.com/plugshare.production.photos/thumb/137659_1466187596.png" width="72px" height="72px"></a>
+                <a class="charger_info_photo" rel="player=img" href="https://s3.amazonaws.com/plugshare.production.photos/photos/119851.jpg" id="119851"><img src="https://s3.amazonaws.com/plugshare.production.photos/thumb/119851.png" width="72px" height="72px"></a>
+            </div>
+        </div>
+        <div id="charger_info_spacer"></div>
+        <div id="charger_info_subheader">Last Check In</div>
+        <div id="charger_info_checkins"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/negative_review_icon.png"> <span class="review_date">Sep 16, 2017 3:37 PM</span> <a id="charger_info_show_reviews" href="#">Show Comments</a> </div>
+    </div>
+    <div id="charger_info_reviews"><a id="charger_info_hide_reviews" href="#">Go Back</a>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/negative_review_icon.png"> <span class="review_date">Sep 16, 2017 3:37 PM</span>
+                <div class="review_comment">one station broken</div>
+            </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/positive_review_icon.png"> <span class="review_comment_name">Nick</span> <span class="review_date">Sep 14, 2017 10:14 AM</span> </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/positive_review_icon.png"> <span class="review_comment_name">Aaron</span> <span class="review_date">Sep 8, 2017 6:27 PM</span>
+                <div class="review_comment">Just FYI far right cord does not charge. </div>
+            </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/positive_review_icon.png"> <span class="review_comment_name">darksoldier360</span> <span class="review_date">Aug 6, 2017 7:23 PM</span> </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/positive_review_icon.png"> <span class="review_comment_name">Andy</span> <span class="review_date">Jul 23, 2017 2:46 PM</span> </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/positive_review_icon.png"> <span class="review_comment_name">GQ</span> <span class="review_date">Jul 15, 2017 5:44 PM</span> </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/positive_review_icon.png"> <span class="review_comment_name">Derek</span> <span class="review_date">Jul 8, 2017 11:32 PM</span>
+                <div class="review_comment">Free during open business hours. Very nice and will make me frequent this shopping center more often. </div>
+            </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/negative_review_icon.png"> <span class="review_comment_name">Shadow</span> <span class="review_date">Jun 25, 2017 9:40 AM</span> </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/positive_review_icon.png"> <span class="review_comment_name">Steve Broyles</span> <span class="review_date">May 27, 2017 10:01 AM</span>
+                <div class="review_comment">Free. And near the door. Nice, Kohl's. </div>
+            </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/positive_review_icon.png"> <span class="review_comment_name">Kim &amp; Steve Red Rooster</span> <span class="review_date">Apr 8, 2017 1:53 PM</span> </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/positive_review_icon.png"> <span class="review_comment_name">Kim &amp; Steve Red Rooster</span> <span class="review_date">Apr 2, 2017 9:16 AM</span> </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/positive_review_icon.png"> <span class="review_comment_name">Kim &amp; Steve Red Rooster</span> <span class="review_date">Apr 1, 2017 12:08 PM</span> </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/negative_review_icon.png"> <span class="review_comment_name">Luis</span> <span class="review_date">Dec 29, 2016 1:51 AM</span>
+                <div class="review_comment">Still not working. Ugh</div>
+            </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/negative_review_icon.png"> <span class="review_comment_name">JOHN</span> <span class="review_date">Dec 11, 2016 2:57 PM</span>
+                <div class="review_comment">Contacted Kohls. Kohls said to contact property owner. Property owner will not return numerous voice mails.</div>
+            </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/negative_review_icon.png"> <span class="review_comment_name">evcaryes</span> <span class="review_date">Dec 9, 2016 9:48 AM</span>
+                <div class="review_comment">Not authorized for some reason</div>
+            </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/negative_review_icon.png"> <span class="review_comment_name">susheel</span> <span class="review_date">Nov 17, 2016 6:49 PM</span> </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/negative_review_icon.png"> <span class="review_comment_name">JOHN</span> <span class="review_date">Nov 10, 2016 6:43 PM</span>
+                <div class="review_comment">All four in use. I wish there were more stations.</div>
+            </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/positive_review_icon.png"> <span class="review_comment_name">Dan</span> <span class="review_date">Oct 14, 2016 3:05 PM</span> </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/positive_review_icon.png"> <span class="review_comment_name">Andy</span> <span class="review_date">Oct 12, 2016 9:03 PM</span>
+                <div class="review_comment">1.8kWh in 28 min</div>
+            </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/positive_review_icon.png"> <span class="review_comment_name">A LEAF EZ-Charge℠ App user</span> <span class="review_date">Sep 25, 2016 4:54 PM</span>
+                <div class="review_comment">Free 6.6kwh.. While shopping therapy</div>
+            </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/positive_review_icon.png"> <span class="review_comment_name">Mike</span> <span class="review_date">Jul 1, 2016 12:56 PM</span>
+                <div class="review_comment">Free and easy </div>
+            </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/positive_review_icon.png"> <span class="review_comment_name">Elsa</span> <span class="review_date">May 15, 2016 4:01 PM</span>
+                <div class="review_comment">First charge in my new smart ev! Very convenient for shopping </div>
+            </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/positive_review_icon.png"> <span class="review_comment_name">DrTope</span> <span class="review_date">Apr 4, 2016 5:18 PM</span> </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/positive_review_icon.png"> <span class="review_comment_name">DrTope</span> <span class="review_date">Apr 4, 2016 1:52 PM</span> </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/positive_review_icon.png"> <span class="review_comment_name">Rex</span> <span class="review_date">Apr 2, 2016 6:56 PM</span> </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/positive_review_icon.png"> <span class="review_comment_name">Pavan</span> <span class="review_date">Mar 30, 2016 4:39 PM</span> </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/positive_review_icon.png"> <span class="review_comment_name">Bemi</span> <span class="review_date">Mar 17, 2016 11:54 AM</span> </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/positive_review_icon.png"> <span class="review_comment_name">Ganna</span> <span class="review_date">Feb 25, 2016 6:43 PM</span> </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/positive_review_icon.png"> <span class="review_comment_name">Ganna</span> <span class="review_date">Feb 23, 2016 6:26 PM</span> </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/positive_review_icon.png"> <span class="review_comment_name">donavan</span> <span class="review_date">Feb 20, 2016 5:32 PM</span> </div>
+        </div>
+        <div>
+            <div class="review_content"> <img class="review_icon" src="https://s3.amazonaws.com/plugshare.production.assets/assets/positive_review_icon.png"> <span class="review_date">Feb 20, 2016 5:15 PM</span>
+                <div class="review_comment">Thank you Kohl's!</div>
+            </div>
+        </div>
+    </div>
+    <div id="charger_info_footer">
+        <ul id="charger_info_actions">
+            <li><a id="charger_action_review" href="#">Check In</a></li>
+            <li><a id="charger_action_directions" href="https://maps.google.com/?daddr=37.699722,-121.886215" target="_blank">Directions</a></li>
+            <li><a id="charger_action_share" href="#">Share</a></li>
+        </ul>
+    </div>
+</div>
+<input type="text" id="feildInput">
 				 								<button type="buttom" id="btnCl">submit</button>`;
             this.addInfoWindow(userMarker, content);
         }
+    }
+    getLocationSpecifc(userlocation) {
+        this.tempToken = this.loginObj;
+        var CORSHeaders = new __WEBPACK_IMPORTED_MODULE_5__angular_http__["a" /* Headers */]();
+        let accessToken = this.tempToken._body;
+        let parseToken = JSON.parse(accessToken);
+        CORSHeaders.append('x-access-token', parseToken.token);
+        CORSHeaders.append('x-key', 'pramod');
+        //._url = 'https://evoint.herokuapp.com/api/v1/getChargingPointBy?longitude='+ userlocation.longitude + '&latitude=' + userlocation.latitude;
+        let _url = "https://evoint.herokuapp.com/api/v1/getChargingPointBy?longitude=-122.03940310273435&latitude=37.955338108848444";
+        this.http.get(_url, { headers: CORSHeaders }).map((res) => res.json())
+            .subscribe(data => {
+            console.log('data', data);
+            let tempData = [];
+            for (let latLng of data) {
+                let AddressInfo = {};
+                AddressInfo['Latitude'] = latLng.location[0];
+                AddressInfo['Longitude'] = latLng.location[1];
+                tempData.push(AddressInfo);
+            }
+            this.addMarkersToMap(tempData);
+        });
     }
     addInfoWindowToMarker(marker) { }
     AutocompleteDirectionsHandler(map) {
@@ -317,6 +581,9 @@ let Landingpage = class Landingpage {
         let longitude = center.lng();
         let latitude = center.lat();
         let userDraggedLatLng = {};
+        // AddressInfo['Longitude'] = latLng.location[1];
+        // AddressInfo['Latitude'] = latLng.location[0];
+        //
         userDraggedLatLng['longitude'] = longitude;
         userDraggedLatLng['latitude'] = latitude;
         this.getLocationSpecifc(userDraggedLatLng);

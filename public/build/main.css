@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .ion-ios-add:before {
   content: "\f102";
 }
@@ -25494,6 +25495,14 @@ page-landingpage .md home-page #map {
   font-family: Roboto;
   font-size: 13px;
   font-weight: 300;
+}
+
+div#ccharger_info_header_title {
+  background-image: url(https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS-sprite_2x-6e2545f…._V2_.png);
+  /* background-repeat: no-repeat; */
+  background-position: -77% 54%;
+  width: 180px;
+  height: 28px;
 }
 
 .label-ios {
