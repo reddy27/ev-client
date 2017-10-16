@@ -78,6 +78,24 @@ let Landingpage = class Landingpage {
             }
         });
     }
+    callLoginAgain() {
+        let postData = {
+            "username": "pramod",
+            "password": "pramod123"
+        };
+        var CORSHeaders = new __WEBPACK_IMPORTED_MODULE_5__angular_http__["a" /* Headers */]();
+        CORSHeaders.append('Content-Type', 'application/json');
+        this.http.post('https://evoint.herokuapp.com/user/login', postData, { headers: CORSHeaders }).subscribe(data => {
+            //  this.loginObj = data;
+            //  this.getMarkers();
+            //  if(navigator.geolocation){
+            // 		navigator.geolocation.getCurrentPosition(position => {
+            // 			this.location = position.coords;
+            // 			//this.getLocationSpecifc(position.coords);
+            // 		});
+            //  }
+        });
+    }
     loadMap() {
         // this.geolocation.getCurrentPosition().then((position) => {
         //   let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -194,7 +212,15 @@ let Landingpage = class Landingpage {
             }
             this.addMarkersToMap(tempData, clearAllMarkers);
         }, error => {
+            console.log('err', error);
+            if (error.status == 400) {
+                this.callLoginAgain();
+                //this.getMarkers();
+            }
             let parseErr = JSON.parse(error._body);
+            // if(data.status === 400){
+            // 	this.callLoginAgain();
+            // }
             if (parseErr.status == 500 || parseErr.status == 403) {
                 let toast = this.toastCtrl.create({
                     message: `error : ${parseErr.message} `,
