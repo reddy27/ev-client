@@ -30,13 +30,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 let Landingpage = class Landingpage {
-    constructor(navCtrl, navParams, barcode, storage, geolocation, http) {
+    constructor(navCtrl, navParams, barcode, storage, geolocation, http, toastCtrl) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
         this.barcode = barcode;
         this.storage = storage;
         this.geolocation = geolocation;
         this.http = http;
+        this.toastCtrl = toastCtrl;
         this.tmpMarkers = [];
         // var postLeavingTime = (val)  => {
         this.getUserLocation = (userLatLng) => {
@@ -193,7 +194,18 @@ let Landingpage = class Landingpage {
             }
             this.addMarkersToMap(tempData, clearAllMarkers);
         }, error => {
-            console.log('error', error);
+            let parseErr = JSON.parse(error._body);
+            if (parseErr.status == 500 || parseErr.status == 403) {
+                let toast = this.toastCtrl.create({
+                    message: `error : ${parseErr.message} `,
+                    duration: 3000,
+                    position: 'top'
+                });
+                toast.onDidDismiss(() => {
+                    console.log('Dismissed toast');
+                });
+                toast.present();
+            }
         });
     }
     addMarkersToMap(markers, clear) {
@@ -206,7 +218,7 @@ let Landingpage = class Landingpage {
             var Marker = new google.maps.Marker({
                 position: position,
                 title: marker.title,
-                icon: 'https://s3.amazonaws.com/plugshare.production.assets/icons/G@2x.png',
+                icon: 'assets/icon/download-1.png',
                 map: this.map,
                 draggable: false
             });
@@ -416,11 +428,37 @@ let Landingpage = class Landingpage {
         let parseToken = JSON.parse(accessToken);
         CORSHeaders.append('x-access-token', parseToken.token);
         CORSHeaders.append('x-key', 'pramod');
-        let _url = 'https://evoint.herokuapp.com/api/v1/getChargingPointBy?longitude=' + userlocation.longitude + '&latitude=' + userlocation.latitude;
+        if (userlocation.longitude.toString().length >= 12) {
+            var lng = userlocation.longitude.toString();
+            var trimLng = lng.length - 12;
+            var customLng = lng.substr(0, lng.length - trimLng);
+        }
+        else {
+            var customLng = userlocation.longitude;
+        }
+        if (userlocation.latitude) {
+            var lat = userlocation.latitude.toString();
+            var trimLat = lat.length - 10;
+            var customLat = lat.substr(0, lat.length - trimLat);
+        }
+        else {
+            var customLat = userlocation.longitude;
+        }
+        let _url = 'https://evoint.herokuapp.com/api/v1/getChargingPointBy?longitude=' + customLng + '&latitude=' + customLat;
         //let _url = "https://evoint.herokuapp.com/api/v1/getChargingPointBy?longitude=-122.03940310273435&latitude=37.955338108848444";
         this.http.get(_url, { headers: CORSHeaders }).map((res) => res.json())
             .subscribe(data => {
             console.log('data', data);
+            var toDispalyData = data;
+            let toast = this.toastCtrl.create({
+                message: `Found ${toDispalyData.length} charging points near`,
+                duration: 3000,
+                position: 'top'
+            });
+            toast.onDidDismiss(() => {
+                console.log('Dismissed toast');
+            });
+            toast.present();
             let tempData = [];
             for (let latLng of data) {
                 let AddressInfo = {};
@@ -429,6 +467,8 @@ let Landingpage = class Landingpage {
                 tempData.push(AddressInfo);
             }
             this.addMarkersToMap(tempData, clear);
+        }, error => {
+            console.log('fdsaf', error);
         });
     }
     addInfoWindowToMarker(marker) { }
@@ -539,10 +579,10 @@ Landingpage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
         selector: 'landingpage',template:/*ion-inline-start:"/Users/reddy/Documents/ev/src/pages/landingpage/landingpage.html"*/'<ion-header>\n    <ion-navbar primary>\n        <ion-buttons start>\n            <button menuToggle>\n                <ion-icon name="menu"></ion-icon>\n            </button>\n        </ion-buttons>\n        <ion-title style="text-align: center;"> Charge-Points </ion-title>\n        <ion-buttons end></ion-buttons>\n    </ion-navbar>\n</ion-header>\n<ion-content>\n\n    <div id="mode-selector" class="controls" style="display:none">\n        <input type="radio" name="type" id="changemode-walking" checked="checked">\n        <label for="changemode-walking">Walking</label>\n        <input type="radio" name="type" id="changemode-transit">\n        <label for="changemode-transit">Transit</label>\n        <input type="radio" name="type" id="changemode-driving">\n        <label for="changemode-driving">Driving</label>\n    </div>\n    <!-- <div id="street-view" height="100%"></div> -->\n    <div #map id="map" style="width: 100%;height: 100%;">\n        <h1>Loading maps</h1>\n        <h1>Please wait</h1> </div>\n</ion-content>\n'/*ion-inline-end:"/Users/reddy/Documents/ev/src/pages/landingpage/landingpage.html"*/,
     }),
-    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2__ionic_native_barcode_scanner__["a" /* BarcodeScanner */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ionic_native_barcode_scanner__["a" /* BarcodeScanner */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_3__ionic_storage__["b" /* Storage */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ionic_storage__["b" /* Storage */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_4__ionic_native_geolocation__["a" /* Geolocation */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__ionic_native_geolocation__["a" /* Geolocation */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_5__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__angular_http__["b" /* Http */]) === "function" && _g || Object])
+    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2__ionic_native_barcode_scanner__["a" /* BarcodeScanner */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ionic_native_barcode_scanner__["a" /* BarcodeScanner */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_3__ionic_storage__["b" /* Storage */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ionic_storage__["b" /* Storage */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_4__ionic_native_geolocation__["a" /* Geolocation */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__ionic_native_geolocation__["a" /* Geolocation */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_5__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__angular_http__["b" /* Http */]) === "function" && _g || Object, typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* ToastController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* ToastController */]) === "function" && _h || Object])
 ], Landingpage);
 
-var _a, _b, _c, _d, _e, _f, _g;
+var _a, _b, _c, _d, _e, _f, _g, _h;
 //# sourceMappingURL=landingpage.js.map
 
 /***/ }),
