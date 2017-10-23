@@ -9,10 +9,11 @@ webpackJsonp([1],{
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_barcode_scanner__ = __webpack_require__(198);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_storage__ = __webpack_require__(31);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_geolocation__ = __webpack_require__(197);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_http__ = __webpack_require__(57);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_map__ = __webpack_require__(199);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_map__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__barcode_barcode__ = __webpack_require__(273);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_geolocation__ = __webpack_require__(197);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_http__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_add_operator_map__ = __webpack_require__(199);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_rxjs_add_operator_map__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -25,6 +26,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+//import { AboutPage} from '../about/about'
 
 
 
@@ -60,12 +63,15 @@ let Landingpage = class Landingpage {
         this.loadMap();
         this.initMap();
     }
+    authenticate() {
+        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_4__barcode_barcode__["a" /* Barcode */]);
+    }
     login() {
         let postData = {
             "username": "pramod",
             "password": "pramod123"
         };
-        var CORSHeaders = new __WEBPACK_IMPORTED_MODULE_5__angular_http__["a" /* Headers */]();
+        var CORSHeaders = new __WEBPACK_IMPORTED_MODULE_6__angular_http__["a" /* Headers */]();
         CORSHeaders.append('Content-Type', 'application/json');
         this.http.post('https://evoint.herokuapp.com/user/login', postData, { headers: CORSHeaders }).subscribe(data => {
             this.loginObj = data;
@@ -83,7 +89,7 @@ let Landingpage = class Landingpage {
             "username": "pramod",
             "password": "pramod123"
         };
-        var CORSHeaders = new __WEBPACK_IMPORTED_MODULE_5__angular_http__["a" /* Headers */]();
+        var CORSHeaders = new __WEBPACK_IMPORTED_MODULE_6__angular_http__["a" /* Headers */]();
         CORSHeaders.append('Content-Type', 'application/json');
         this.http.post('https://evoint.herokuapp.com/user/login', postData, { headers: CORSHeaders }).subscribe(data => {
             //  this.loginObj = data;
@@ -167,7 +173,7 @@ let Landingpage = class Landingpage {
                 if (val.length > 0) {
                     let customObj = {};
                     customObj['leavingtime'] = val;
-                    var CORSHeaders = new __WEBPACK_IMPORTED_MODULE_5__angular_http__["a" /* Headers */]();
+                    var CORSHeaders = new __WEBPACK_IMPORTED_MODULE_6__angular_http__["a" /* Headers */]();
                     CORSHeaders.append('Content-Type', 'application/json');
                     this.http.post('http://localhost:4001/addTime', customObj).subscribe(data => {
                         const res = data.json();
@@ -178,7 +184,7 @@ let Landingpage = class Landingpage {
     }
     getMarkers() {
         this.tempToken = this.loginObj;
-        var CORSHeaders = new __WEBPACK_IMPORTED_MODULE_5__angular_http__["a" /* Headers */]();
+        var CORSHeaders = new __WEBPACK_IMPORTED_MODULE_6__angular_http__["a" /* Headers */]();
         let accessToken = this.tempToken._body;
         let parseToken = JSON.parse(accessToken);
         CORSHeaders.append('x-access-token', parseToken.token);
@@ -449,7 +455,7 @@ let Landingpage = class Landingpage {
         // var currentMarkers = new google.maps.Marker({});
         //  this.tempToken = this.loginObj;
         let clear = true;
-        var CORSHeaders = new __WEBPACK_IMPORTED_MODULE_5__angular_http__["a" /* Headers */]();
+        var CORSHeaders = new __WEBPACK_IMPORTED_MODULE_6__angular_http__["a" /* Headers */]();
         let accessToken = this.tempToken._body;
         let parseToken = JSON.parse(accessToken);
         CORSHeaders.append('x-access-token', parseToken.token);
@@ -509,13 +515,15 @@ let Landingpage = class Landingpage {
         this.directionsService = new google.maps.DirectionsService;
         this.directionsDisplay = new google.maps.DirectionsRenderer;
         this.directionsDisplay.setMap(map);
-        var originAutocomplete = new google.maps.places.Autocomplete(originInput, { placeIdOnly: true });
-        var destinationAutocomplete = new google.maps.places.Autocomplete(destinationInput, { placeIdOnly: true });
+        //  var originAutocomplete = new google.maps.places.Autocomplete(
+        // 		 originInput, {placeIdOnly: true});
+        //  var destinationAutocomplete = new google.maps.places.Autocomplete(
+        // 		 destinationInput, {placeIdOnly: true});
         this.setupClickListener('changemode-walking', 'WALKING');
         this.setupClickListener('changemode-transit', 'TRANSIT');
         this.setupClickListener('changemode-driving', 'DRIVING');
-        this.setupPlaceChangedListener(originAutocomplete, 'ORIG');
-        this.setupPlaceChangedListener(destinationAutocomplete, 'DEST');
+        //this.setupPlaceChangedListener(originAutocomplete, 'ORIG');
+        //this.setupPlaceChangedListener(destinationAutocomplete, 'DEST');
         this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(originInput);
         this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(destinationInput);
         this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(modeSelector);
@@ -603,9 +611,9 @@ __decorate([
 ], Landingpage.prototype, "mapElement", void 0);
 Landingpage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'landingpage',template:/*ion-inline-start:"/Users/reddy/Documents/ev/src/pages/landingpage/landingpage.html"*/'<ion-header>\n    <ion-navbar primary>\n        <ion-buttons start>\n            <button menuToggle>\n                <ion-icon name="menu"></ion-icon>\n            </button>\n        </ion-buttons>\n        <ion-title style="text-align: center;"> Charge-Points </ion-title>\n        <ion-buttons end></ion-buttons>\n    </ion-navbar>\n</ion-header>\n<ion-content>\n\n    <div id="mode-selector" class="controls" style="display:none">\n        <input type="radio" name="type" id="changemode-walking" checked="checked">\n        <label for="changemode-walking">Walking</label>\n        <input type="radio" name="type" id="changemode-transit">\n        <label for="changemode-transit">Transit</label>\n        <input type="radio" name="type" id="changemode-driving">\n        <label for="changemode-driving">Driving</label>\n    </div>\n    <!-- <div id="street-view" height="100%"></div> -->\n    <div #map id="map" style="width: 100%;height: 100%;">\n        <h1>Loading maps</h1>\n        <h1>Please wait</h1> </div>\n</ion-content>\n'/*ion-inline-end:"/Users/reddy/Documents/ev/src/pages/landingpage/landingpage.html"*/,
+        selector: 'landingpage',template:/*ion-inline-start:"/Users/reddy/Documents/ev/src/pages/landingpage/landingpage.html"*/'<ion-header>\n    <ion-navbar primary>\n        <ion-buttons start>\n            <button menuToggle>\n                <ion-icon name="menu"></ion-icon>\n            </button>\n        </ion-buttons>\n        <ion-title style="text-align: center;"> Charge-Points\n            <span (click)="authenticate()">login</span>\n\n\n        </ion-title>\n\n        <ion-buttons end></ion-buttons>\n    </ion-navbar>\n</ion-header>\n<ion-content>\n\n    <div id="mode-selector" class="controls" style="display:none">\n        <input type="radio" name="type" id="changemode-walking" checked="checked">\n        <label for="changemode-walking">Walking</label>\n        <input type="radio" name="type" id="changemode-transit">\n        <label for="changemode-transit">Transit</label>\n        <input type="radio" name="type" id="changemode-driving">\n        <label for="changemode-driving">Driving</label>\n    </div>\n    <!-- <div id="street-view" height="100%"></div> -->\n    <div #map id="map" style="width: 100%;height: 100%;">\n        <!-- <h1>Loading maps</h1>\n        <h1>Please wait</h1>  -->\n      </div>\n</ion-content>\n'/*ion-inline-end:"/Users/reddy/Documents/ev/src/pages/landingpage/landingpage.html"*/,
     }),
-    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2__ionic_native_barcode_scanner__["a" /* BarcodeScanner */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ionic_native_barcode_scanner__["a" /* BarcodeScanner */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_3__ionic_storage__["b" /* Storage */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ionic_storage__["b" /* Storage */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_4__ionic_native_geolocation__["a" /* Geolocation */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__ionic_native_geolocation__["a" /* Geolocation */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_5__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__angular_http__["b" /* Http */]) === "function" && _g || Object, typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* ToastController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* ToastController */]) === "function" && _h || Object])
+    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2__ionic_native_barcode_scanner__["a" /* BarcodeScanner */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ionic_native_barcode_scanner__["a" /* BarcodeScanner */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_3__ionic_storage__["b" /* Storage */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ionic_storage__["b" /* Storage */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_5__ionic_native_geolocation__["a" /* Geolocation */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__ionic_native_geolocation__["a" /* Geolocation */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_6__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6__angular_http__["b" /* Http */]) === "function" && _g || Object, typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* ToastController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* ToastController */]) === "function" && _h || Object])
 ], Landingpage);
 
 var _a, _b, _c, _d, _e, _f, _g, _h;
@@ -962,9 +970,10 @@ let MyApp = class MyApp {
 MyApp = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/Users/reddy/Documents/ev/src/app/app.html"*/'<ion-nav [root]="rootPage"></ion-nav>\n'/*ion-inline-end:"/Users/reddy/Documents/ev/src/app/app.html"*/
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */]])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* Platform */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* Platform */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */]) === "function" && _c || Object])
 ], MyApp);
 
+var _a, _b, _c;
 //# sourceMappingURL=app.component.js.map
 
 /***/ }),
@@ -1063,7 +1072,7 @@ let HomePage = class HomePage {
             const drive = res.user.elgibility.driveEligibility;
             console.log(drive);
             this.storage.set('canDrive', drive);
-            this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_2__landingpage_landingpage__["a" /* Landingpage */]);
+            //this.navCtrl.push(Landingpage);
         }, error => {
             let toast = this.toastCtrl.create({
                 message: 'Please correct username/password',
@@ -1083,10 +1092,10 @@ HomePage = __decorate([
         styles: [`input.ng-invalid{border:2px solid red}input.ng-valid{border:rgb(204, 204, 204);}input.ng-pristine{border:rgb(204, 204, 204);}`],
         styleUrls: ['https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css']
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* LoadingController */], __WEBPACK_IMPORTED_MODULE_3__angular_http__["b" /* Http */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* ToastController */], __WEBPACK_IMPORTED_MODULE_4__ionic_storage__["b" /* Storage */]])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* LoadingController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* LoadingController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_http__["b" /* Http */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* ToastController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* ToastController */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4__ionic_storage__["b" /* Storage */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__ionic_storage__["b" /* Storage */]) === "function" && _e || Object])
 ], HomePage);
 
+var _a, _b, _c, _d, _e;
 //# sourceMappingURL=home.js.map
 
 /***/ }),
@@ -1099,6 +1108,8 @@ HomePage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_storage__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__landingpage_landingpage__ = __webpack_require__(103);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1111,6 +1122,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
 /**
  * Generated class for the Barcode page.
  *
@@ -1118,33 +1131,48 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  * on Ionic pages and navigation.
  */
 let Barcode = class Barcode {
-    constructor(navCtrl, navParams, storage) {
+    constructor(navCtrl, navParams, storage, http, toastCtrl) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
         this.storage = storage;
+        this.http = http;
+        this.toastCtrl = toastCtrl;
+    }
+    onSubmit(form, storage) {
+        console.log('you submitted value:', form);
+        var CORSHeaders = new __WEBPACK_IMPORTED_MODULE_3__angular_http__["a" /* Headers */]();
+        CORSHeaders.append('Content-Type', 'application/json');
+        this.http.post('https://evoint.herokuapp.com/user/login', form, { headers: CORSHeaders }).subscribe(data => {
+            const res = data.json();
+            console.log('res', res);
+            if (res.token) {
+                this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_4__landingpage_landingpage__["a" /* Landingpage */]);
+            }
+            //this.storage.set('canDrive', drive);
+        }, error => {
+            let toast = this.toastCtrl.create({
+                message: 'Please correct username/password',
+                duration: 3000,
+                position: 'top'
+            });
+            toast.onDidDismiss(() => {
+                console.log('Dismissed toast');
+            });
+            toast.present();
+        });
     }
     ionViewDidLoad() {
-        this.getLocation();
-    }
-    getLocation() {
-        this.storage.get('whereToGo').then((val) => {
-            if (val) {
-                this.imgsrc = "https://chart.googleapis.com/chart?cht=qr&chs=200x200&choe=UTF-8&chld=h%7c1&chl=" + "wheretogo" + val.origin + "andDest " + val.dest;
-                //this.imgsrc="https://chart.googleapis.com/chart?cht=qr&chs=200x200&choe=UTF-8&chld=h%7c1&chl=wheretogoChIJ86V7GXT0j4ARbMMDIJdJbuAandDestEiRCYXJ0IFdheSwgRnJlbW9udCwgQ0EsIFVuaXRlZCBTdGF0ZXM"
-            }
-            else {
-                this.imgsrc = "https://chart.googleapis.com/chart?cht=qr&chs=200x200&choe=UTF-8&chld=h%7c1&chl=";
-            }
-        });
+        //this.getLocation();
     }
 };
 Barcode = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-barcode',template:/*ion-inline-start:"/Users/reddy/Documents/ev/src/pages/barcode/barcode.html"*/'<!--\n  Generated template for the Barcode page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>barcode</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n<img [src]="imgsrc" id="barcode" alt="">\n</ion-content>\n'/*ion-inline-end:"/Users/reddy/Documents/ev/src/pages/barcode/barcode.html"*/,
+        selector: 'page-barcode',template:/*ion-inline-start:"/Users/reddy/Documents/ev/src/pages/barcode/barcode.html"*/'<!--\n  Generated template for the Barcode page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>barcode</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n<!-- <img [src]="imgsrc" id="barcode" alt=""> -->\n<form #loginForm = "ngForm" (ngSubmit)="onSubmit(loginForm.value)" class="form-horizontal" id="loginForm">\n<!-- <form  class="form-horizontal">  -->\n <div class="form-group">\n   <label class="control-label col-sm-2" for="email">Email:</label>\n   <div class="col-sm-10">\n     <input type="email" class="form-control" id="username" name="username" n placeholder="Enter email" ngModel> </div>\n </div>\n <div class="form-group">\n   <label class="control-label col-sm-2" for="pwd">Password:</label>\n   <div class="col-sm-10">\n     <input type="password" class="form-control" id="pwd" name="password" placeholder="Enter password" ngModel> </div>\n </div>\n <div class="form-group">\n   <div class="col-sm-offset-2 col-sm-10">\n     <div class="checkbox">\n       <label>\n         <input type="checkbox"> Remember me</label>\n     </div>\n   </div>\n </div>\n <div class="form-group">\n   <div class="col-sm-offset-2 col-sm-10 text-center">\n   <!-- <button (click)="nextPage();"  type ="submit" class="btn btn-primary ">Login</button> -->\n     <button type="submit" class="btn btn-primary ">Login</button>\n   </div>\n </div>\n <br>\n <br>\n <br>\n <div class="container">\n   <div class="row">\n     <div class="facebook col-xs-6"> </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n     <div class="twitter col-xs-6"> </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n     <div class="google col-xs-6"> </div>\n   </div>\n </div>\n</form>\n<!-- <div class="container">\n  <h2 class="text-center">Login</h2>\n  <div class="container text-center"> -->\n    <!-- <img src="" class="img-circle text-center" alt="Cinque Terre" width="80" height="80">  -->\n  <!-- </div>\n   <form #loginForm = "ngForm" (ngSubmit)="onSubmit(loginForm.value)" class="form-horizontal" id="loginForm">\n    <form  class="form-horizontal">\n    <div class="form-group">\n      <label class="control-label col-sm-2" for="email">Email:</label>\n      <div class="col-sm-10">\n        <input type="email" class="form-control" id="username" name="username" n placeholder="Enter email" ngModel> </div>\n    </div>\n    <div class="form-group">\n      <label class="control-label col-sm-2" for="pwd">Password:</label>\n      <div class="col-sm-10">\n        <input type="password" class="form-control" id="pwd" name="password" placeholder="Enter password" ngModel> </div>\n    </div>\n    <div class="form-group">\n      <div class="col-sm-offset-2 col-sm-10">\n        <div class="checkbox">\n          <label>\n            <input type="checkbox"> Remember me</label>\n        </div>\n      </div>\n    </div>\n    <div class="form-group">\n      <div class="col-sm-offset-2 col-sm-10 text-center">\n    <button (click)="nextPage();"  type ="submit" class="btn btn-primary ">Login</button>\n      </div>\n    </div>\n    <br>\n    <br>\n    <br>\n    <div class="container">\n      <div class="row">\n        <div class="facebook col-xs-6"> </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n        <div class="twitter col-xs-6"> </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n        <div class="google col-xs-6"> </div>\n      </div>\n    </div>\n  </form>\n  <button style="position: absolute;top: 82%;left: 67%;" class="btn btn-info col-md-3 col-md-offset-3">Register</button>\n</div>-->\n</ion-content>\n'/*ion-inline-end:"/Users/reddy/Documents/ev/src/pages/barcode/barcode.html"*/,
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */], __WEBPACK_IMPORTED_MODULE_2__ionic_storage__["b" /* Storage */]])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__ionic_storage__["b" /* Storage */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ionic_storage__["b" /* Storage */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_http__["b" /* Http */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* ToastController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* ToastController */]) === "function" && _e || Object])
 ], Barcode);
 
+var _a, _b, _c, _d, _e;
 //# sourceMappingURL=barcode.js.map
 
 /***/ }),
